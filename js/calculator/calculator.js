@@ -39,8 +39,27 @@ class CalculatorModel extends EventEmitter{
                     this.#operation = operation;
                     console.log(this.#result +' so ' + this.#buffer);
                     break;
+                case 'summary':
+                    this.#result = this.#result + this.#buffer;
+                    this.#operation = operation;
+                    console.log(this.#result +' so ' + this.#buffer);
+                    break;   
+                case 'divide':
+                    this.#result = this.#result / this.#buffer;
+                    this.#operation = '';
+                    console.log(this.#result +' so ' + this.#buffer);
+                    break; 
+                case 'multiply':
+                    this.#result = this.#result * this.#buffer;
+                    this.#operation = '';
+                    console.log(this.#result +' so ' + this.#buffer);
+                    break;              
             }
         }
+    }
+
+    getRes(){
+        return this.#result;
     }
 
     getResult(){
@@ -50,12 +69,35 @@ class CalculatorModel extends EventEmitter{
                 this.#operation = '';
                 console.log(this.#result + ' gr ' + this.#buffer);
                 break;
+            case 'summary':
+                this.#result = this.#result + this.#buffer;
+                this.#operation = '';
+                console.log(this.#result +' so ' + this.#buffer);
+                break; 
+            case 'divide':
+                this.#result = this.#result / this.#buffer;
+                this.#operation = '';
+                console.log(this.#result +' so ' + this.#buffer);
+                break; 
+            case 'multiply':
+                this.#result = this.#result * this.#buffer;
+                this.#operation = '';
+                console.log(this.#result +' so ' + this.#buffer);
+                break; 
+            case '':
+                this.#result = this.#buffer;
         }
         return this.#result;
     }
 
+    reset(){
+        this.#result = 0;
+        this.#operation = '';
+        this.#buffer = 0;
+    }
+
     setBuffer(buffer){
-        this.#buffer = buffer;
+        this.#buffer = Number(buffer);
     }
 
     getBuffer(){
@@ -117,8 +159,20 @@ class CalculatorView extends EventEmitter{
                 case 'diff':
                     key.addEventListener('click', () => this.difference());
                     break;
+                case 'summ':
+                    key.addEventListener('click', () => this.summary());
+                    break;    
+                case 'divide':
+                    key.addEventListener('click', () => this.divide());
+                    break;    
+                case 'multiply':
+                    key.addEventListener('click', () => this.multiply());
+                    break;    
                 case 'equals':
                     key.addEventListener('click', () => this.showResult());
+                    break;
+                case 'reset':
+                    key.addEventListener('click', () => this.reset());
                     break;
             }
         }
@@ -147,9 +201,43 @@ class CalculatorView extends EventEmitter{
         else{
             this.#model.setBuffer(parseFloat(this.#buffer));
             this.#model.setOperation('difference');
-            
             this.#buffer = '0';
+            
+            this.#screen.innerText = this.#model.getRes();
         }
+    }
+    
+    /*Перепиши этот бред*/
+
+    summary(){
+        this.#model.setBuffer(parseFloat(this.#buffer));
+        this.#model.setOperation('summary');
+        this.#buffer = '0';
+        
+        this.#screen.innerText = this.#model.getRes();
+    }
+
+    multiply(){
+        this.#model.setBuffer(parseFloat(this.#buffer));
+        this.#model.setOperation('multiply');
+        this.#buffer = '0';
+        
+        this.#screen.innerText = this.#model.getRes();
+    }
+
+    divide(){
+        this.#model.setBuffer(parseFloat(this.#buffer));
+        this.#model.setOperation('divide');
+        this.#buffer = '0';
+        
+        this.#screen.innerText = this.#model.getRes();
+    }
+
+    reset(){
+        this.#buffer = '0';
+
+        this.#model.reset();
+
         this.updateScreen();
     }
 
@@ -175,12 +263,12 @@ class CalculatorView extends EventEmitter{
     }
 
     updateParts(){
+        /*посмотри, не поворяется ли этот код*/
         const state = this.#model.isPowered();
         if (state) this.#screen.classList.add('active');
         else this.#screen.classList.remove('active');
 
-        this.#buffer = this.#model.getBuffer();
-        this.updateScreen();
+        this.reset();
     }
 
     numberPressed(number){

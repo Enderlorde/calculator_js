@@ -134,6 +134,7 @@ body{
     transition: color 0.5s ease-in-out, text-shadow 0.5s ease-in-out;
 
     overflow: hidden;
+    user-select: none;
 }
 
 @keyframes pulse{
@@ -203,6 +204,8 @@ body{
     font-family: "Michroma", serif;
     font-size: 16px;
     font-weight: bold;
+
+    cursor: pointer;
 }
 
 .btn_slider{
