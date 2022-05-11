@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator" id="calculator">
+        <div class="display">
+            <div class="display__wrapper wrapper">
+                <div class="wrapper__item_top">
+                    <h2>BASIO memory-8C</h2>
+                    electronic calculator
+                </div>
+
+                <div class="wrapper__item_bottom" id="calculator_screen">
+                    888888
+                </div>
+            </div>
+        </div>
+
+        <ul class="calculator__keyboard keyboard" id="calculator_keyboard">
+            <li>
+                <div class="keyboard__item">
+                    <button class="keyboard__btn btn btn_slider active">
+
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="memres" class="keyboard__btn btn btn_func btn_blue">
+                        MR
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="memminus" class="keyboard__btn btn btn_func btn_blue">
+                        M-
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="memplus" class="keyboard__btn btn btn_func btn_blue">
+                        M+
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="reset" class="keyboard__btn btn btn_func btn_red">
+                        AC
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="cancel" class="keyboard__btn btn btn_func btn_blue">
+                        C
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="sqroot" class="keyboard__btn btn btn_func btn_blue">
+                        &radic;
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="percent" class="keyboard__btn btn btn_func btn_blue">
+                        %
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        7
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        8
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        9
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="divide" class="keyboard__btn btn btn_dark">
+                        &divide;
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        4
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        5
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        6
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="multiply" class="keyboard__btn btn btn_dark">
+                        &times;
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        1
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        2
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        3
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="diff" class="keyboard__btn btn btn_dark">
+                        -
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="number" class="keyboard__btn btn btn_light">
+                        0
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="point" class="keyboard__btn btn btn_light">
+                        .
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="equals" class="keyboard__btn btn btn_dark">
+                        =
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="keyboard__item">
+                    <button data-key="summ" class="keyboard__btn btn btn_dark">
+                        +
+                    </button>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="calculator__switch switch" >
+            <div class="switch__wrapper">
+                <div class="switch__slider" id="calculator_switch">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/calculator/calculator.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>
