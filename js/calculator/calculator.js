@@ -19,6 +19,7 @@ class CalculatorModel extends EventEmitter{
     #buffer = 0;
     #operation = '';
     #result = 0;
+    #memory = 0;
 
     constructor(){
         super();
@@ -46,16 +47,28 @@ class CalculatorModel extends EventEmitter{
                     break;   
                 case 'divide':
                     this.#result = this.#result / this.#buffer;
-                    this.#operation = '';
+                    this.#operation = operation;
                     console.log(this.#result +' so ' + this.#buffer);
                     break; 
                 case 'multiply':
                     this.#result = this.#result * this.#buffer;
-                    this.#operation = '';
+                    this.#operation = operation;
                     console.log(this.#result +' so ' + this.#buffer);
                     break;              
             }
         }
+    }
+
+    addToMemory(){
+        this.#memory += this.#buffer;
+    }
+
+    substractFromMemory(){
+        this.#memory -= this.#buffer 
+    }
+
+    readFromMemory(){
+        return this.#memory;
     }
 
     getRes(){
@@ -67,22 +80,18 @@ class CalculatorModel extends EventEmitter{
             case 'difference':
                 this.#result = this.#result - this.#buffer;
                 this.#operation = '';
-                console.log(this.#result + ' gr ' + this.#buffer);
                 break;
             case 'summary':
                 this.#result = this.#result + this.#buffer;
                 this.#operation = '';
-                console.log(this.#result +' so ' + this.#buffer);
                 break; 
             case 'divide':
                 this.#result = this.#result / this.#buffer;
                 this.#operation = '';
-                console.log(this.#result +' so ' + this.#buffer);
                 break; 
             case 'multiply':
                 this.#result = this.#result * this.#buffer;
                 this.#operation = '';
-                console.log(this.#result +' so ' + this.#buffer);
                 break; 
             case '':
                 this.#result = this.#buffer;
@@ -90,10 +99,15 @@ class CalculatorModel extends EventEmitter{
         return this.#result;
     }
 
+    getRoot(){
+        return this.#result = Math.sqrt(this.getResult());
+    }
+
     reset(){
         this.#result = 0;
         this.#operation = '';
         this.#buffer = 0;
+        this.#memory = 0;
     }
 
     setBuffer(buffer){
@@ -150,30 +164,55 @@ class CalculatorView extends EventEmitter{
                 case 'number':
                     key.addEventListener('click', (e) => this.numberPressed(e.target.innerText));
                     break;
+
                 case 'cancel':
                     key.addEventListener('click', (e) => this.cancel());
                     break;
+
                 case 'point':
                     key.addEventListener('click', () => this.addPoint());
                     break;
+
                 case 'diff':
                     key.addEventListener('click', () => this.difference());
                     break;
+
                 case 'summ':
                     key.addEventListener('click', () => this.summary());
                     break;    
+
                 case 'divide':
                     key.addEventListener('click', () => this.divide());
                     break;    
+
                 case 'multiply':
                     key.addEventListener('click', () => this.multiply());
                     break;    
+
                 case 'equals':
                     key.addEventListener('click', () => this.showResult());
                     break;
+
                 case 'reset':
                     key.addEventListener('click', () => this.reset());
                     break;
+
+                case 'sqroot':
+                    key.addEventListener('click', () => this.getRoot());
+                    break;
+
+                case 'memread':
+                    key.addEventListener('click', () => this.readFromMemory());
+                    break;
+
+                case 'memadd':
+                    key.addEventListener('click', () => this.addToMemory());
+                    break;
+
+                case 'memsubstract':
+                    key.addEventListener('click', () => this.substractFromMemory());
+                    break;
+
             }
         }
 
@@ -184,6 +223,33 @@ class CalculatorView extends EventEmitter{
 
         this.#switch.addEventListener('click', () => this.changeSwitchState());
         this.#model.on('power_state_changed',() => this.updateParts());
+    }
+
+    /*Нужно переделать*/
+
+    readFromMemory(){
+        this.#buffer = this.#model.readFromMemory();
+        this.updateScreen();
+    }   
+
+    substractFromMemory(){
+        this.#model.setBuffer(this.#buffer);
+        this.#model.substractFromMemory();
+    }
+
+    addToMemory(){
+        this.#model.setBuffer(this.#buffer);
+        this.#model.addToMemory();
+    }
+
+
+    getRoot(){
+        this.#model.setBuffer(this.#buffer);
+        const result =  this.#model.getRoot();
+        console.log(result);
+        this.#buffer = result;
+
+        this.updateScreen();
     }
 
     showResult(){

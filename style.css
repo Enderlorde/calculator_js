@@ -61,6 +61,8 @@ body{
     height: 10px;
     background-color: #716E77;
     transition: top 0.5s ease-in-out;
+
+    cursor: pointer;
 }
 
 .switch__slider.active{
