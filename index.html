@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+    <link rel="stylesheet" href="js/calculator/calculator.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,7 +25,11 @@
         <ul class="calculator__keyboard keyboard" id="calculator_keyboard">
             <li>
                 <div class="keyboard__item">
-                    <button class="keyboard__btn btn btn_slider active">
+                    <div class="keyboard__label">
+                        <span>f</span>
+                        <span>5/4(2)</span>
+                    </div>
+                    <button data-key="round" class="keyboard__btn btn btn_slider active">
 
                     </button>
                 </div>
