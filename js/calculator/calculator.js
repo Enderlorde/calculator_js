@@ -30,34 +30,34 @@ class CalculatorModel extends EventEmitter{
         super(); 
     }
 
+    useOperation(operator){
+        switch (operator){
+            case 'difference':
+                this.#result = this.#result - this.#buffer;
+                break;
+
+            case 'summary':
+                this.#result = this.#result + this.#buffer;
+                break;   
+
+            case 'divide':
+                this.#result = this.#result / this.#buffer;              
+                break; 
+
+            case 'multiply':
+                this.#result = this.#result * this.#buffer;
+                break;         
+        }
+    }
+
     setOperation(operation){
         if (this.#operation == ''){
             this.#operation = operation;
             this.#result = this.#buffer;
         }
         else{
-            switch (this.#operation){
-                case 'difference':
-                    this.#result = this.#result - this.#buffer;
-                    this.#operation = operation;
-                    break;
-
-                case 'summary':
-                    this.#result = this.#result + this.#buffer;
-                    this.#operation = operation;
-                    break;   
-
-                case 'divide':
-                    this.#result = this.#result / this.#buffer;
-                    this.#operation = operation;
-                    break; 
-
-                case 'multiply':
-                    this.#result = this.#result * this.#buffer;
-                    this.#operation = operation;
-                    break;         
-
-            }
+            this.useOperation(this.#operation);
+            this.#operation = operation;
         }
     }
 
@@ -78,31 +78,11 @@ class CalculatorModel extends EventEmitter{
     }
 
     getResult(){
-        switch (this.#operation){
-            case 'difference':
-                this.#result = this.#result - this.#buffer;
-                this.#operation = '';
-                break;
+        if (this.#operation != '') this.useOperation(this.#operation);
+        else this.#result = this.#buffer;
 
-            case 'summary':
-                this.#result = this.#result + this.#buffer;
-                this.#operation = '';
-                break; 
+        this.#operation = '';
 
-            case 'divide':
-                this.#result = this.#result / this.#buffer;
-                this.#operation = '';
-                break; 
-
-            case 'multiply':
-                this.#result = this.#result * this.#buffer;
-                this.#operation = '';
-                break; 
-
-            case '':
-                this.#result = this.#buffer;
-                break;
-        }
         return this.#result;
     }
 
@@ -204,23 +184,23 @@ class CalculatorView extends EventEmitter{
                     break;
 
                 case 'diff':
-                    key.addEventListener('click', () => this.difference());
+                    key.addEventListener('click', () => this.useOperator('difference'));
                     break;
 
                 case 'summ':
-                    key.addEventListener('click', () => this.summary());
+                    key.addEventListener('click', () => this.useOperator('summary'));
                     break;    
 
                 case 'divide':
-                    key.addEventListener('click', () => this.divide());
+                    key.addEventListener('click', () => this.useOperator('divide'));
                     break;    
 
                 case 'multiply':
-                    key.addEventListener('click', () => this.multiply());
+                    key.addEventListener('click', () => this.useOperator('multiply'));
                     break;    
 
                 case 'equals':
-                    key.addEventListener('click', () => this.showResult());
+                    key.addEventListener('click', () => this.useResult('result'));
                     break;
 
                 case 'reset':
@@ -228,7 +208,7 @@ class CalculatorView extends EventEmitter{
                     break;
 
                 case 'sqroot':
-                    key.addEventListener('click', () => this.getRoot());
+                    key.addEventListener('click', () => this.useResult('root'));
                     break;
 
                 case 'memread':
@@ -236,15 +216,15 @@ class CalculatorView extends EventEmitter{
                     break;
 
                 case 'memadd':
-                    key.addEventListener('click', () => this.addToMemory());
+                    key.addEventListener('click', () => this.useMemory('add'));
                     break;
 
                 case 'memsubstract':
-                    key.addEventListener('click', () => this.substractFromMemory());
+                    key.addEventListener('click', () => this.useMemory('substract'));
                     break;
 
                 case 'percent':
-                    key.addEventListener('click', () => this.getPercent());
+                    key.addEventListener('click', () => this.useResult('percent'));
                     break;
 
                 case 'round':
@@ -272,9 +252,7 @@ class CalculatorView extends EventEmitter{
         }
     }
 
-    /*Нужно переделать*/
-
-    switchRound(target){
+    switchRound(){
         this.#round = !this.#round;
 
         this.updateRoundSwitch();
@@ -282,81 +260,52 @@ class CalculatorView extends EventEmitter{
 
     readFromMemory(){
         this.#buffer = this.#model.readFromMemory();
+        
         this.updateScreen();
     }   
 
-    substractFromMemory(){
+    useMemory(operation){
         this.#model.setBuffer(this.#buffer);
-        this.#model.substractFromMemory();
+        switch (operation){
+            case 'add':
+                this.#model.addToMemory();
+                break;
+            case 'substract':
+                this.#model.substractFromMemory();
+                break;
+        }
     }
 
-    addToMemory(){
+    useResult(operation){
+        let result;
         this.#model.setBuffer(this.#buffer);
-        this.#model.addToMemory();
-    }
-
-    getRoot(){
-        this.#model.setBuffer(this.#buffer);
-        const result =  this.useRound(this.#model.getRoot());
+        switch (operation){
+            case 'root':
+                result = this.useRound(this.#model.getRoot());
+                break;
+            case 'percent':
+                result = this.useRound(this.#model.getPercent());
+                break;
+            case 'result':
+                result = this.useRound(this.#model.getResult());
+                break;
+        }
         this.#buffer = String(result);
 
         this.updateScreen();
     }
 
-    getPercent(){
-        this.#model.setBuffer(this.#buffer);
-        const result = this.useRound(this.#model.getPercent());
-        this.#buffer = String(result);
-
-        this.updateScreen();
-    }
-
-    showResult(){
-        this.#model.setBuffer(this.#buffer);
-        const result = this.useRound(this.#model.getResult());
-        this.#buffer = String(result);
-
-        this.updateScreen();
-    }
-
-    
-    difference(){
+    useOperator(operation){
         const onlyZero = new RegExp(/^0*$/);
-        if (onlyZero.test(this.#buffer))
+        if (onlyZero.test(this.#buffer) && operation === 'difference')
             this.#buffer = '-';
         else{
             this.#model.setBuffer(parseFloat(this.#buffer));
-            this.#model.setOperation('difference');
+            this.#model.setOperation(operation);
             this.#buffer = '0';
             
-            this.#screen.innerText = this.#model.getRes();
+            this.#screen.innerText = this.useRound(this.#model.getRes());
         }
-    }
-    
-    /*Перепиши этот бред*/
-
-    summary(){
-        this.#model.setBuffer(parseFloat(this.#buffer));
-        this.#model.setOperation('summary');
-        this.#buffer = '0';
-        
-        this.#screen.innerText = this.#model.getRes();
-    }
-
-    multiply(){
-        this.#model.setBuffer(parseFloat(this.#buffer));
-        this.#model.setOperation('multiply');
-        this.#buffer = '0';
-        
-        this.#screen.innerText = this.#model.getRes();
-    }
-
-    divide(){
-        this.#model.setBuffer(parseFloat(this.#buffer));
-        this.#model.setOperation('divide');
-        this.#buffer = '0';
-        
-        this.#screen.innerText = this.#model.getRes();
     }
 
     reset(){
@@ -379,6 +328,7 @@ class CalculatorView extends EventEmitter{
     cancel(){
         this.#buffer = String(this.#buffer).slice(0,-1);
         if (this.#buffer.length <= 0) this.#buffer = '0';
+
         this.updateScreen();
     }
 
@@ -388,8 +338,18 @@ class CalculatorView extends EventEmitter{
         else this.#switch.classList.remove('active');
     }
 
+    numberPressed(number){
+        const onlyZero = new RegExp(/^0*$/);
+        if (onlyZero.test(this.#buffer)){
+            this.#buffer = number.toString();
+        }else{
+            this.#buffer += number.toString();
+        }
+
+        this.updateScreen();
+    }
+
     updateParts(){
-        /*посмотри, не поворяется ли этот код*/
         const state = this.#model.isPowered();
         if (state) this.#screen.classList.add('active');
         else this.#screen.classList.remove('active');
@@ -406,16 +366,6 @@ class CalculatorView extends EventEmitter{
         }
     }
 
-    numberPressed(number){
-        const onlyZero = new RegExp(/^0*$/);
-        if (onlyZero.test(this.#buffer)){
-            this.#buffer = number.toString();
-        }else{
-            this.#buffer += number.toString();
-        }
-        this.updateScreen();
-    }
-
     updateScreen(){
         if (String(this.#buffer).length < this.#screenSize){
             this.#screen.innerText = this.#buffer;
@@ -424,8 +374,6 @@ class CalculatorView extends EventEmitter{
             this.#screen.innerText = 'Overflow';
         } 
     }
-
-
 }
 
 class CalculatorController extends EventEmitter{
