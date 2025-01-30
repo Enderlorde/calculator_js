@@ -1,12 +1,12 @@
 @font-face {
     font-family: "Michroma";
-    src: url("/fonts/Michroma-Regular.ttf");
+    src: url("../../fonts/Michroma-Regular.ttf");
 }
 
 @font-face {
     font-family: "Digital-7";
     font-style: italic;
-    src: url("/fonts/digital-7\ \(mono\ italic\).ttf");
+    src: url("../../fonts/digital-7\ \(mono\ italic\).ttf");
 }
 
 .calculator{
